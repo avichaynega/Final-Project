@@ -4,7 +4,7 @@ Authors : Avichay nega  , [Ido Elmaliach](https://github.com/IdosElmo), [Matan T
 
 Advisor : Yossi Zaguri
 
-<img src="ProjectPoster.jpg" width="410" height="625" />
+<img src="ProjectPoster.jpg" width="700" height="800" />
 
 * [Vision Statement](https://github.com/avichaynega/Final-Project/blob/master/Vision%20Statement.pdf)
 
