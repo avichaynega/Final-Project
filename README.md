@@ -1,4 +1,4 @@
-# <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Ariel_university.logo.jpg" width="200" height="85" /> Final Project
+# <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Ariel_university.logo.jpg" width="200" height="85" /> <p align="center"> Final Project </p>
 ### Automatic feeding machine 
 Authors : Avichay nega  , [Ido Elmaliach](https://github.com/IdosElmo), [Matan Tzabari](https://github.com/matanya679)
 
