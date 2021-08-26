@@ -18,7 +18,7 @@ The Automatic Feeding Machine will document eating times , amount of food per us
 In addition to the analysis process, the AI can identify anomalies in the cat's behavior and report to the user.  
 
 
-### appendix
+### Appendix
 ##
 * [Vision Statement](https://github.com/avichaynega/Final-Project/blob/master/Vision%20Statement.pdf)
 
