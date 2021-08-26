@@ -10,4 +10,4 @@ Advisor : Yossi Zaguri
 
 * [Product Requirement Document](https://github.com/avichaynega/Final-Project/blob/master/PRD%20(product%20requirement%20document).pdf)
 
-*[Software Design Document](https://github.com/avichaynega/Final-Project/blob/master/software%20design%20document.pdf)
+* [Software Design Document](https://github.com/avichaynega/Final-Project/blob/master/software%20design%20document.pdf)
