@@ -36,29 +36,129 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <WiFi.h>
+#include <PubSubClient.h>
 
 #define RST_PIN         22          // Configurable, see typical pin layout above
 #define SS_PIN          5         // Configurable, see typical pin layout above
 
-const char* ssid = "ido";
-const char* password = "0504571865";
-const byte led_gpio = 32;
+char ssid[] = "ido";
+char password[] = "0504571865";
+
+const char* brokerUsername = "1337souless@gmail.com";
+const char* brokerPassword = "b6820e33";
+const char* broker = "mqtt.dioty.co";
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+WiFiClient espClient;
+PubSubClient client(espClient);
+long lastMsg = 0;
+char msg[50];
+const byte led_gpio = 32;
+
+float count = 0;
+float counter = 0;
+
+bool flag = true;
+int status = WL_IDLE_STATUS;
 
 void setup() {
   Serial.begin(115200);   // Initialize serial communications with the PC
-  WiFi.begin(ssid, password);
-  while (!Serial && WiFi.status() != WL_CONNECTED);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-  Serial.println(F("Connected to WiFi."));
+  //WiFi.begin(ssid, password);
+
+  while (!Serial);
+  
+  while (status != WL_CONNECTED){    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+
+    Serial.print("Attempting to connect to WPA SSID: ");
+
+    Serial.println(ssid);
+
+    status = WiFi.begin(ssid, password);
+
+    // wait 10 seconds for connection:
+
+    delay(5000);
+    
+  }
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
   mfrc522.PCD_DumpVersionToSerial();  // Show details of PCD - MFRC522 Card Reader details
+
+  client.setServer(broker, 1883);
+  client.setCallback(callback);
+  
   //Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
   pinMode(led_gpio, OUTPUT);
 }
 
+void callback(char* topic, byte* message, unsigned int length) {
+  Serial.print("Message arrived on topic: ");
+  Serial.print(topic);
+  Serial.print(". Message: ");
+  String messageTemp;
+  
+  for (int i = 0; i < length; i++) {
+//    Serial.print((char)message[i]);
+    messageTemp += (char)message[i];
+  }
+  Serial.print(messageTemp);
+  Serial.println();
+
+  // Feel free to add more if statements to control more GPIOs with MQTT
+
+  // If a message is received on the topic esp32/output, you check if the message is either "on" or "off". 
+  // Changes the output state according to the message
+  if (String(topic) == "/1337souless@gmail.com/esp32/output") {
+    Serial.print("Changing output to ");
+    if(messageTemp == "on"){
+      Serial.println("on");
+      digitalWrite(led_gpio, HIGH);
+    }
+    else if(messageTemp == "off"){
+      Serial.println("off");
+      digitalWrite(led_gpio, LOW);
+    }
+  }
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    //Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("ESP8266Client", brokerUsername, brokerPassword)) {
+      //Serial.println("connected");
+      // Subscribe
+      client.subscribe("/1337souless@gmail.com/esp32/output");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
 void loop() {
+
+  if (flag) {
+    
+    digitalWrite(led_gpio, HIGH);   // turn the LED off (LOW voltage level)
+    delay(1000);
+    digitalWrite(led_gpio, LOW);   // turn the LED off (LOW voltage level)
+    flag = false;
+  }
+
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+
   // Look for new cards
   if ( ! mfrc522.PICC_IsNewCardPresent()) {
     return;
@@ -71,14 +171,28 @@ void loop() {
 
   // Dump debug info about the card; PICC_HaltA() is automatically called
   mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
-
   
-
   digitalWrite(led_gpio, HIGH);   // turn the LED on (HIGH voltage level)
   Serial.println(F("Connection open for 3 seconds.."));
-  delay(3000);
+  delay(1500);
+
+  // Convert the value to a char array
+  char tempString[8];
+  dtostrf(counter, 1, 2, tempString);
+  Serial.print("Temperature: ");
+  Serial.println(counter);
+  client.publish("/1337souless@gmail.com/esp32/temperature", tempString);
+  counter = counter + 1;
+
+  // Convert the value to a char array
+  char humString[8];
+  dtostrf(count, 1, 2, humString);
+  Serial.print("Humidity: ");
+  Serial.println(count);
+  client.publish("/1337souless@gmail.com/esp32/humidity", humString);
+  count = count - 1;
 
   digitalWrite(led_gpio, LOW);   // turn the LED off (LOW voltage level)
   Serial.println(F("Connection closed."));
-  delay(3000);
+  delay(1500);
 }
