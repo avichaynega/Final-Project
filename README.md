@@ -42,6 +42,6 @@ In addition to the analysis process, the AI can identify anomalies in the cat's 
 ##    
    
   
-###   <img src="https://mqtt.org/assets/downloads/mqtt-logo.png" width="100" height="40" /> MQTT: The Standard for IoT Messaging
+###   <img align="left" src="https://mqtt.org/assets/downloads/mqtt-logo.png" width="100" height="25" /> MQTT: The Standard for IoT Messaging
 MQTT is an OASIS standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. MQTT today is used in a wide variety of industries, such as automotive, manufacturing, telecommunications, oil and gas, etc.
     
