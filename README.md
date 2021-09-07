@@ -31,13 +31,16 @@ In addition to the analysis process, the AI can identify anomalies in the cat's 
 ### Prerequisite
 ##
 
- - Arudio IDE
+ For Arudino IDE
  - MFRC522 by https://github.com/miguelbalboa/rfid
+ - HX711 Library by https://github.com/bogde/HX711
  - PubSubClient
+ 
+ For Python AI
  - Numpy
  - Pandas
  - Scikit-learn
- - HX711 Library - https://github.com/bogde/HX711
+ 
 
 ### Getting started 
 ##    
@@ -57,3 +60,18 @@ Node-RED is a programming tool for wiring together hardware devices, APIs and on
 It provides a browser-based editor that makes it easy to wire together flows using the wide range of nodes in the palette   
 that can be deployed to its runtime in a single-click.  
 you can see more here https://nodered.org/#get-started 
+
+
+### ESP32 Wiring
+##
+
+The ESP32 Controller is connected to several key components:
+- RF522 Sensor
+- HX711 module (Weight sensor)
+- Linear Actuator
+- 2 Relays
+
+![image](https://github.com/avichaynega/Final-Project/blob/master/images/esp32%20wiring.png)
+
+
+
