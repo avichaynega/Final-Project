@@ -37,12 +37,23 @@
 #include <MFRC522.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include "HX711.h"
+HX711 loadcell;
 
 #define RST_PIN         22          // Configurable, see typical pin layout above
-#define SS_PIN          5         // Configurable, see typical pin layout above
+#define SS_PIN          5         // Cnfigurable, see typical pin layout above
+
+const int LOADCELL_DOUT_PIN = 26;
+const int LOADCELL_SCK_PIN = 27;
+
+const long LOADCELL_DIVIDER = 1970.403;
 
 char ssid[] = "ido";
 char password[] = "0504571865";
+
+// parents home
+//char ssid[] = "IdosNet";
+//char password[] = "0507332821";
 
 const char* brokerUsername = "1337souless@gmail.com";
 const char* brokerPassword = "b6820e33";
@@ -53,20 +64,28 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
-const byte led_gpio = 32;
 
-float count = 0;
+const byte led_gpio = 32;
+const byte actuator_gpio = 15;
+const byte actuator_gpio_c = 2;
+
+float weight = 0;
+float weight_now = 0;
+float prev_weight = 0;
 float counter = 0;
+float food_counter = -1;
 
 bool flag = true;
 int status = WL_IDLE_STATUS;
 
 void setup() {
   Serial.begin(115200);   // Initialize serial communications with the PC
-  //WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password);
 
   while (!Serial);
-  
+
+// disable wifi
+
   while (status != WL_CONNECTED){    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 
     Serial.print("Attempting to connect to WPA SSID: ");
@@ -83,6 +102,12 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
+  // 3. Initialize library for hx711
+  loadcell.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  loadcell.set_scale(LOADCELL_DIVIDER);
+  loadcell.tare();
+//  loadcell.set_offset(LOADCELL_OFFSET);
   
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
@@ -93,6 +118,8 @@ void setup() {
   
   //Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
   pinMode(led_gpio, OUTPUT);
+  pinMode(actuator_gpio, OUTPUT);
+  pinMode(actuator_gpio_c, OUTPUT);
 }
 
 void callback(char* topic, byte* message, unsigned int length) {
@@ -111,14 +138,14 @@ void callback(char* topic, byte* message, unsigned int length) {
   // Feel free to add more if statements to control more GPIOs with MQTT
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off". 
-  // Changes the output state according to the message
-  if (String(topic) == "/1337souless@gmail.com/esp32/output") {
-    Serial.print("Changing output to ");
     if(messageTemp == "on"){
       Serial.println("on");
       digitalWrite(led_gpio, HIGH);
     }
     else if(messageTemp == "off"){
+  // Changes the output state according to the message
+  if (String(topic) == "/1337souless@gmail.com/esp32/output") {
+    Serial.print("Changing output to ");
       Serial.println("off");
       digitalWrite(led_gpio, LOW);
     }
@@ -144,6 +171,45 @@ void reconnect() {
   }
 }
 
+void actuator() {
+  // using 2 relays to reverse the polarity of an actuator
+  // to get it to open then close.
+  // algo:
+  // turn on gpio 2 to activate the actuator
+  // turn off 2
+  // turn on 15 to reverse polarity
+  // turn on 2 to activate actuator
+  // turn off 2
+  // turn off 15
+
+  // use 2 gpio to open the actuator
+  digitalWrite(actuator_gpio_c, HIGH);
+
+  Serial.println(F("Connection open for 5 seconds.."));
+  delay(5000);
+
+  // close gpio 2
+  digitalWrite(actuator_gpio_c, LOW);
+
+  // turn on 15 gpio
+  digitalWrite(actuator_gpio, HIGH);   // turn the LED off (LOW voltage level)
+  delay(1000);
+
+  // turn on 2 gpio to contract the actuator
+  digitalWrite(actuator_gpio_c, HIGH);   // turn the LED off (LOW voltage level)
+  delay(5000);
+
+  // turn off 2
+  digitalWrite(actuator_gpio_c, LOW);   // turn the LED off (LOW voltage level)
+  delay(1000);
+
+  // turn off 15
+  digitalWrite(actuator_gpio, LOW);
+  Serial.println(F("Connection closed."));
+  
+  
+}
+
 void loop() {
 
   if (flag) {
@@ -160,7 +226,7 @@ void loop() {
   client.loop();
 
   // Look for new cards
-  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+  if ( ! mfrc522.PICC_IsNewCardPresent()) {         
     return;
   }
 
@@ -173,26 +239,83 @@ void loop() {
   mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
   
   digitalWrite(led_gpio, HIGH);   // turn the LED on (HIGH voltage level)
-  Serial.println(F("Connection open for 3 seconds.."));
-  delay(1500);
+  delay(1000);
+  digitalWrite(led_gpio, LOW);
 
-  // Convert the value to a char array
-  char tempString[8];
-  dtostrf(counter, 1, 2, tempString);
-  Serial.print("Temperature: ");
-  Serial.println(counter);
-  client.publish("/1337souless@gmail.com/esp32/temperature", tempString);
+  // count rf frequency
   counter = counter + 1;
 
-  // Convert the value to a char array
-  char humString[8];
-  dtostrf(count, 1, 2, humString);
-  Serial.print("Humidity: ");
-  Serial.println(count);
-  client.publish("/1337souless@gmail.com/esp32/humidity", humString);
-  count = count - 1;
+  // Acquire reading from weight sensor
+  weight = loadcell.get_units(10);
+  Serial.print("Weight: ");
+  Serial.println(weight);
 
-  digitalWrite(led_gpio, LOW);   // turn the LED off (LOW voltage level)
-  Serial.println(F("Connection closed."));
-  delay(1500);
+  // refill food
+  if (weight < 10) {
+    actuator();
+    food_counter = food_counter + 1;
+
+    weight_now = loadcell.get_units(10);
+    prev_weight = weight_now;
+
+    delay(500);
+    
+    emitWeight();
+    emitFrequency();
+    
+  }
+  else {
+    
+    // rf without refill and slight change of weight
+    if (weight < prev_weight - 2) {
+      emitFrequency();
+      weight_now = loadcell.get_units(10);
+      emitWeight();
+      prev_weight = weight_now;
+    }
+
+    // rf without refill and without change of weight
+    else {
+      emitFrequency();
+      weight_now = weight;
+      emitWeight();
+    }
+  }
+
+
 }
+
+void emitFrequency() {
+ 
+  char fString[8];
+  dtostrf(counter, 1, 2, fString);
+  Serial.print("Frequency: ");
+  Serial.println(counter);
+  delay(1000);
+  client.publish("/1337souless@gmail.com/esp32/frequency", fString); 
+}
+
+void emitWeight() {
+    // Convert the value to a char array
+  char dwString[8];
+  float dw;
+  if (food_counter == 0) {
+    dw = (weight_now - prev_weight);
+  }
+  else {
+    dw = (weight_now - prev_weight) * food_counter;
+  }
+  dtostrf(dw, 1, 2, dwString);
+  Serial.print("Delta Weight: ");
+  Serial.println(dw);
+  client.publish("/1337souless@gmail.com/esp32/delta_weight", dwString);
+
+  char wString[8];
+  dtostrf(weight_now, 1, 2, wString);
+  Serial.print("Weight: ");
+  Serial.println(weight_now);
+  client.publish("/1337souless@gmail.com/esp32/weight", wString);
+  
+}
+
+
