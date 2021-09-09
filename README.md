@@ -70,17 +70,19 @@ The ESP32 Controller is connected to several key components:
 - HX711 module (Weight sensor)
 - Linear Actuator
 - 2 Relays
-
-![image](https://github.com/avichaynega/Final-Project/blob/master/images/esp32%20wiring.png)
+- 
+<img src="./images/esp32%20wiring.png" width="800" height="500" />
 
 The Actuator (our engine) is connected to the controller via 2 relays. The relays are used to reverse the polarity so the actuator can work in both directions
 without having to manually reverse the wires.
+Inside the Relay, pins 3-4 have an open connection, 3-2 has a closed connection, 7-8 have an open connection and 8-9 has a closed connection.
+Engine batteries produce 6v.
 
-![image](https://github.com/avichaynega/Final-Project/blob/master/images/Engine.jpeg)
+<img src="./images/Engine.jpeg" width="500" height="500" />
 
 The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each. In order to make sure our relay works, as it should recieve 5v to activate, we did a simple trick to make sure the GPIO signal from the controller can produce 5v.
 
-<img src="images/Relay.jpg" width="500" height="500" />
+<img src="./images/Relay.jpeg" width="500" height="500" />
 
 
 
