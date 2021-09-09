@@ -73,5 +73,14 @@ The ESP32 Controller is connected to several key components:
 
 ![image](https://github.com/avichaynega/Final-Project/blob/master/images/esp32%20wiring.png)
 
+The Actuator (our engine) is connected to the controller via 2 relays. The relays are used to reverse the polarity so the actuator can work in both directions
+without having to manually reverse the wires.
+
+![image](https://github.com/avichaynega/Final-Project/blob/master/images/Engine.jpeg)
+
+The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each. In order to make sure our relay works, as it should recieve 5v to activate, we did a simple trick to make sure the GPIO signal from the controller can produce 5v.
+
+<img src="images/Relay.jpg" width="500" height="500" />
+
 
 
