@@ -87,6 +87,15 @@ The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each
 
 <img src="./images/Relay.jpeg" width="500" height="500" />
 
+
+### Machine Learning
+
+-   https://github.com/avichaynega/Final-Project/blob/master/knn_anomaly.ipynb  
+   we used two models in order to show the anomality ,in first case we have used the knn model that showed the  seperation between the anomality ,
+   and the normal results. for comparing with some other models we used in the second case   the Isolation Forest model we did the same process as the first model 
+   and we got resembling results as shown in the graph.
+   
+
 ### Future Work
 ##
 
