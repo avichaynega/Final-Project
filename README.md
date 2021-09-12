@@ -3,6 +3,7 @@
 # <p align="center"> Final Project - Automatic feeding machine</p>  
 
 Authors : Avichay nega  , [Ido Elmaliach](https://github.com/IdosElmo), [Matan Tzabari](https://github.com/matanya679)
+Mail: afmproject2021@gmail.com
 
 Advisor : Yossi Zaguri  
 
@@ -31,16 +32,18 @@ In addition to the analysis process, the AI can identify anomalies in the cat's 
 ### Prerequisite
 ##
 
- For Arudino IDE
- - MFRC522 by https://github.com/miguelbalboa/rfid
- - HX711 Library by https://github.com/bogde/HX711
- - PubSubClient
- 
- For Python AI
- - Numpy
- - Pandas
- - Scikit-learn
- 
+For Arudino IDE
+- MFRC522 by https://github.com/miguelbalboa/rfid
+- HX711 Library by https://github.com/bogde/HX711
+- PubSubClient
+
+For Python AI
+- Numpy
+- Pandas
+- Scikit-learn
+
+MQTT Broker
+- DIoTY http://mqtt.dioty.co/
 
 ### Getting started 
 ##    
@@ -84,5 +87,9 @@ The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each
 
 <img src="./images/Relay.jpeg" width="500" height="500" />
 
+### Future Work
+##
+
+- connect to a chosen network using Ubidots: https://ubidots.com/blog/connect-your-esp8266-to-any-available-wi-fi-network/
 
 
