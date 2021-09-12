@@ -45,29 +45,25 @@ HX711 loadcell;
 
 const int LOADCELL_DOUT_PIN = 26;
 const int LOADCELL_SCK_PIN = 27;
-
 const long LOADCELL_DIVIDER = 1970.403;
 
-char ssid[] = "ido";
-char password[] = "0504571865";
+char ssid[] = "**********";
+char password[] = "*********";
 
-// parents home
-//char ssid[] = "IdosNet";
-//char password[] = "0507332821";
+const char* brokerUsername = "afmproject2021@gmail.com";
+const char* brokerPassword = "*********";
 
-const char* brokerUsername = "1337souless@gmail.com";
-const char* brokerPassword = "b6820e33";
 const char* broker = "mqtt.dioty.co";
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
-char msg[50];
 
 const byte led_gpio = 32;
 const byte actuator_gpio = 15;
 const byte actuator_gpio_c = 2;
+
+const float engine_time = 1000;
 
 float weight = 0;
 float weight_now = 0;
@@ -107,7 +103,6 @@ void setup() {
   loadcell.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   loadcell.set_scale(LOADCELL_DIVIDER);
   loadcell.tare();
-//  loadcell.set_offset(LOADCELL_OFFSET);
   
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
@@ -115,8 +110,10 @@ void setup() {
 
   client.setServer(broker, 1883);
   client.setCallback(callback);
+  client.connect("ESP8266Client", brokerUsername, brokerPassword);
+
+  client.subscribe("/afmproject2021@gmail.com/afm/debug");
   
-  //Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
   pinMode(led_gpio, OUTPUT);
   pinMode(actuator_gpio, OUTPUT);
   pinMode(actuator_gpio_c, OUTPUT);
@@ -129,13 +126,10 @@ void callback(char* topic, byte* message, unsigned int length) {
   String messageTemp;
   
   for (int i = 0; i < length; i++) {
-//    Serial.print((char)message[i]);
     messageTemp += (char)message[i];
   }
   Serial.print(messageTemp);
   Serial.println();
-
-  // Feel free to add more if statements to control more GPIOs with MQTT
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off". 
     if(messageTemp == "on"){
@@ -143,12 +137,9 @@ void callback(char* topic, byte* message, unsigned int length) {
       digitalWrite(led_gpio, HIGH);
     }
     else if(messageTemp == "off"){
-  // Changes the output state according to the message
-  if (String(topic) == "/1337souless@gmail.com/esp32/output") {
-    Serial.print("Changing output to ");
+      Serial.print("Changing output to ");
       Serial.println("off");
       digitalWrite(led_gpio, LOW);
-    }
   }
 }
 
@@ -158,10 +149,23 @@ void reconnect() {
     //Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     if (client.connect("ESP8266Client", brokerUsername, brokerPassword)) {
-      //Serial.println("connected");
       // Subscribe
-      client.subscribe("/1337souless@gmail.com/esp32/output");
+      client.subscribe("/afmproject2021@gmail.com/afm/output");
+      client.subscribe("/afmproject2021@gmail.com/afm/debug");
     } else {
+
+      // Possible values for client.state()
+      //#define MQTT_CONNECTION_TIMEOUT     -4
+      //#define MQTT_CONNECTION_LOST        -3
+      //#define MQTT_CONNECT_FAILED         -2
+      //#define MQTT_DISCONNECTED           -1
+      //#define MQTT_CONNECTED               0
+      //#define MQTT_CONNECT_BAD_PROTOCOL    1
+      //#define MQTT_CONNECT_BAD_CLIENT_ID   2
+      //#define MQTT_CONNECT_UNAVAILABLE     3
+      //#define MQTT_CONNECT_BAD_CREDENTIALS 4
+      //#define MQTT_CONNECT_UNAUTHORIZED    5 
+      
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
@@ -186,7 +190,7 @@ void actuator() {
   digitalWrite(actuator_gpio_c, HIGH);
 
   Serial.println(F("Connection open for 5 seconds.."));
-  delay(5000);
+  delay(engine_time);
 
   // close gpio 2
   digitalWrite(actuator_gpio_c, LOW);
@@ -197,7 +201,7 @@ void actuator() {
 
   // turn on 2 gpio to contract the actuator
   digitalWrite(actuator_gpio_c, HIGH);   // turn the LED off (LOW voltage level)
-  delay(5000);
+  delay(engine_time * 2);
 
   // turn off 2
   digitalWrite(actuator_gpio_c, LOW);   // turn the LED off (LOW voltage level)
@@ -213,17 +217,22 @@ void actuator() {
 void loop() {
 
   if (flag) {
-    
     digitalWrite(led_gpio, HIGH);   // turn the LED off (LOW voltage level)
     delay(1000);
     digitalWrite(led_gpio, LOW);   // turn the LED off (LOW voltage level)
     flag = false;
+
+    dbg("WiFi Connected!");
   }
+
+//  dbg("AFM Online");
 
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
+
+
 
   // Look for new cards
   if ( ! mfrc522.PICC_IsNewCardPresent()) {         
@@ -237,6 +246,8 @@ void loop() {
 
   // Dump debug info about the card; PICC_HaltA() is automatically called
   mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+
+  dbg("ID Identified");
   
   digitalWrite(led_gpio, HIGH);   // turn the LED on (HIGH voltage level)
   delay(1000);
@@ -259,7 +270,8 @@ void loop() {
     prev_weight = weight_now;
 
     delay(500);
-    
+
+    dbg("REFILL");
     emitWeight();
     emitFrequency();
     
@@ -272,16 +284,26 @@ void loop() {
       weight_now = loadcell.get_units(10);
       emitWeight();
       prev_weight = weight_now;
+      dbg("Plate is not empty!");
     }
 
     // rf without refill and without change of weight
     else {
+      dbg("Plate is not empty!");
       emitFrequency();
       weight_now = weight;
       emitWeight();
     }
   }
 
+
+}
+
+void dbg(char* msg) {
+  Serial.print("Debug: ");
+  Serial.println(msg);
+  boolean rc = client.publish("/afmproject2021@gmail.com/afm/debug", msg);
+  Serial.println(rc);
 
 }
 
@@ -292,7 +314,7 @@ void emitFrequency() {
   Serial.print("Frequency: ");
   Serial.println(counter);
   delay(1000);
-  client.publish("/1337souless@gmail.com/esp32/frequency", fString); 
+  client.publish("/afmproject2021@gmail.com/afm/frequency", fString); 
 }
 
 void emitWeight() {
@@ -308,14 +330,15 @@ void emitWeight() {
   dtostrf(dw, 1, 2, dwString);
   Serial.print("Delta Weight: ");
   Serial.println(dw);
-  client.publish("/1337souless@gmail.com/esp32/delta_weight", dwString);
+  client.publish("/afmproject2021@gmail.com/afm/delta_weight", dwString);
 
   char wString[8];
   dtostrf(weight_now, 1, 2, wString);
   Serial.print("Weight: ");
   Serial.println(weight_now);
-  client.publish("/1337souless@gmail.com/esp32/weight", wString);
+  client.publish("/afmproject2021@gmail.com/afm/weight", wString);
   
 }
+
 
 
