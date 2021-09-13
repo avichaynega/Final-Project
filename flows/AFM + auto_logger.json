@@ -1,0 +1,803 @@
+[
+    {
+        "id": "b3b7c69a298cb9de",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "9e58624.7faaba",
+        "type": "mqtt out",
+        "z": "b3b7c69a298cb9de",
+        "name": "out",
+        "topic": "/1337souless@gmail.com/afm/output",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "39a87fe1e7be711a",
+        "x": 250,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "83cf37cf.c76988",
+        "type": "ui_switch",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "label": "Output",
+        "tooltip": "",
+        "group": "61285987.c20328",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "9e58624.7faaba"
+            ]
+        ]
+    },
+    {
+        "id": "cc79021b.9a751",
+        "type": "debug",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "22efa7b7.544a28",
+        "type": "debug",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "21eae8f8.2971b8",
+        "type": "ui_chart",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "group": "61285987.c20328",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "F",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 210,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df37e6b7.64c1c8",
+        "type": "ui_gauge",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "group": "61285987.c20328",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "dW",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b3d9",
+            "#0073e6",
+            "#001bd7"
+        ],
+        "seg1": "33",
+        "seg2": "66",
+        "x": 210,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2d5e5c47be45ca1b",
+        "type": "debug",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "81264f84ca2a8402",
+        "type": "ui_gauge",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "group": "61285987.c20328",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "W",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b3d9",
+            "#0073e6",
+            "#001bd7"
+        ],
+        "seg1": "33",
+        "seg2": "66",
+        "x": 210,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ecb90cdcfa6a606a",
+        "type": "template",
+        "z": "b3b7c69a298cb9de",
+        "name": "Weight",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Weight: {{payload}} !",
+        "output": "str",
+        "x": 210,
+        "y": 100,
+        "wires": [
+            [
+                "2d5e5c47be45ca1b"
+            ]
+        ]
+    },
+    {
+        "id": "779980bd7297d75b",
+        "type": "template",
+        "z": "b3b7c69a298cb9de",
+        "name": "dWeight",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Delta Weight: {{payload}} !",
+        "output": "str",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "22efa7b7.544a28"
+            ]
+        ]
+    },
+    {
+        "id": "71b2efb17c722d89",
+        "type": "template",
+        "z": "b3b7c69a298cb9de",
+        "name": "Frequency",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Frequency: {{payload}} !",
+        "output": "str",
+        "x": 230,
+        "y": 300,
+        "wires": [
+            [
+                "cc79021b.9a751"
+            ]
+        ]
+    },
+    {
+        "id": "1b7e4be36406d232",
+        "type": "debug",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "408211ba90458605",
+        "type": "mqtt in",
+        "z": "b3b7c69a298cb9de",
+        "name": "Freq",
+        "topic": "/afmproject2021@gmail.com/afm/frequency",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "2ad031255c7b0870",
+        "nl": false,
+        "rap": false,
+        "x": 90,
+        "y": 300,
+        "wires": [
+            [
+                "21eae8f8.2971b8",
+                "71b2efb17c722d89",
+                "e33e19eca9684ba4"
+            ]
+        ]
+    },
+    {
+        "id": "5811850c32b38814",
+        "type": "mqtt in",
+        "z": "b3b7c69a298cb9de",
+        "name": "dw",
+        "topic": "/afmproject2021@gmail.com/afm/delta_weight",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "2ad031255c7b0870",
+        "nl": false,
+        "rap": false,
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "779980bd7297d75b",
+                "df37e6b7.64c1c8",
+                "d15b704c5a84519b"
+            ]
+        ]
+    },
+    {
+        "id": "e4e73b72d260bc10",
+        "type": "mqtt in",
+        "z": "b3b7c69a298cb9de",
+        "name": "W",
+        "topic": "/afmproject2021@gmail.com/afm/weight",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "2ad031255c7b0870",
+        "nl": false,
+        "rap": false,
+        "x": 90,
+        "y": 100,
+        "wires": [
+            [
+                "ecb90cdcfa6a606a",
+                "81264f84ca2a8402",
+                "a1293294ab77c044"
+            ]
+        ]
+    },
+    {
+        "id": "606cb286be87666e",
+        "type": "mqtt in",
+        "z": "b3b7c69a298cb9de",
+        "name": "Debug",
+        "topic": "/afmproject2021@gmail.com/afm/debug",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "2ad031255c7b0870",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 90,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "925c4edd611e5ea4",
+        "type": "comment",
+        "z": "b3b7c69a298cb9de",
+        "name": "Auto Logger",
+        "info": "",
+        "x": 730,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "302b3a7719278c5f",
+        "type": "function",
+        "z": "b3b7c69a298cb9de",
+        "name": "Set data",
+        "func": "var now = new Date();\n\nmsg.payload = {\n    \"timestamp\" : now.getTime(),\n    \"weight\" : msg.payload.weight,\n    \"delta_weight\" : msg.payload.delta_weight,\n    \"frequency\" : msg.payload.frequency\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 400,
+        "wires": [
+            [
+                "9a2e0e9903b5c45b"
+            ]
+        ]
+    },
+    {
+        "id": "9a2e0e9903b5c45b",
+        "type": "function",
+        "z": "b3b7c69a298cb9de",
+        "name": "Filename generator",
+        "func": "// Get the current time and convert it to text\nvar now = new Date();\nvar yyyy = now.getFullYear();\nvar mm = now.getMonth() < 9 ? \"0\" + (now.getMonth() + 1) : (now.getMonth() + 1); // getMonth() is zero-based\nvar dd  = now.getDate() < 10 ? \"0\" + now.getDate() : now.getDate();\nvar hh = now.getHours() < 10 ? \"0\" + now.getHours() : now.getHours();\nvar mmm  = now.getMinutes() < 10 ? \"0\" + now.getMinutes() : now.getMinutes();\nvar ss  = now.getSeconds() < 10 ? \"0\" + now.getSeconds() : now.getSeconds();\n\n// Generate out file name pattern\nmsg.fname = \"maplin_\"+ yyyy + mm + dd + \".csv\";\n// Full filename with path for the file node later\nmsg.filename = \"/Users/idos/Documents/Arduino/data/\"+ msg.fname;\n\n// We save the current payload into a different place on the msg object\nmsg.filecontent = msg.payload;\n\n// We are passing the file name search pattern to fs node to tell us if the file exists or not\nmsg.payload = {\"pattern\":msg.fname};\n\nnode.status({fill:\"blue\",shape:\"ring\",text:msg.fname});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 480,
+        "wires": [
+            [
+                "dbf8c172eecb5285"
+            ]
+        ]
+    },
+    {
+        "id": "dbf8c172eecb5285",
+        "type": "fs-file-lister",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "start": "/Users/idos/Documents/Arduino/data/",
+        "pattern": "",
+        "folders": "*",
+        "hidden": true,
+        "lstype": "files",
+        "path": true,
+        "single": true,
+        "depth": 0,
+        "stat": true,
+        "showWarnings": false,
+        "x": 820,
+        "y": 420,
+        "wires": [
+            [
+                "567e1b20a4e60faf",
+                "27008ea9ee818e72"
+            ]
+        ]
+    },
+    {
+        "id": "567e1b20a4e60faf",
+        "type": "debug",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "27008ea9ee818e72",
+        "type": "switch",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "property": "$count(msg.payload)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 970,
+        "y": 420,
+        "wires": [
+            [
+                "a01572d904199154"
+            ],
+            [
+                "7fa5856d5fc9afa5"
+            ]
+        ]
+    },
+    {
+        "id": "59e33fdf826a2d8e",
+        "type": "csv",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "all",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "timestamp,weight,delta_weight,frequency",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 1310,
+        "y": 400,
+        "wires": [
+            [
+                "fcf89868c92148ee"
+            ]
+        ]
+    },
+    {
+        "id": "fcf89868c92148ee",
+        "type": "file",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "filename": "",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1470,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3b33fdb20572f372",
+        "type": "csv",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "timestamp,weight,delta_weight,frequency",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 1310,
+        "y": 440,
+        "wires": [
+            [
+                "fcf89868c92148ee"
+            ]
+        ]
+    },
+    {
+        "id": "a01572d904199154",
+        "type": "change",
+        "z": "b3b7c69a298cb9de",
+        "name": "Get file content",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "filecontent",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1140,
+        "y": 400,
+        "wires": [
+            [
+                "59e33fdf826a2d8e"
+            ]
+        ]
+    },
+    {
+        "id": "7fa5856d5fc9afa5",
+        "type": "change",
+        "z": "b3b7c69a298cb9de",
+        "name": "Get file content",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "filecontent",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1140,
+        "y": 440,
+        "wires": [
+            [
+                "3b33fdb20572f372"
+            ]
+        ]
+    },
+    {
+        "id": "ad64ba628c33c533",
+        "type": "comment",
+        "z": "b3b7c69a298cb9de",
+        "name": "AFM",
+        "info": "AFM flow, read data using mqtt protocol",
+        "x": 70,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "a1293294ab77c044",
+        "type": "change",
+        "z": "b3b7c69a298cb9de",
+        "name": "set Weight",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "weight",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "a94741c850a70910"
+            ]
+        ]
+    },
+    {
+        "id": "d15b704c5a84519b",
+        "type": "change",
+        "z": "b3b7c69a298cb9de",
+        "name": "set dWeight",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "delta_weight",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "a94741c850a70910"
+            ]
+        ]
+    },
+    {
+        "id": "e33e19eca9684ba4",
+        "type": "change",
+        "z": "b3b7c69a298cb9de",
+        "name": "set Frequency",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "frequency",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "a94741c850a70910"
+            ]
+        ]
+    },
+    {
+        "id": "a94741c850a70910",
+        "type": "join",
+        "z": "b3b7c69a298cb9de",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 770,
+        "y": 200,
+        "wires": [
+            [
+                "302b3a7719278c5f"
+            ]
+        ]
+    },
+    {
+        "id": "441666820bfb7844",
+        "type": "mqtt in",
+        "z": "b3b7c69a298cb9de",
+        "name": "all",
+        "topic": "/afmproject2021@gmail.com/#",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "2ad031255c7b0870",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 330,
+        "y": 480,
+        "wires": [
+            [
+                "1b7e4be36406d232"
+            ]
+        ]
+    },
+    {
+        "id": "39a87fe1e7be711a",
+        "type": "mqtt-broker",
+        "name": "mqtt dioty test",
+        "broker": "mqtt.dioty.co",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "61285987.c20328",
+        "type": "ui_group",
+        "name": "Main",
+        "tab": "e7c46d5e.a1283",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "2ad031255c7b0870",
+        "type": "mqtt-broker",
+        "name": "mqtt dioty",
+        "broker": "mqtt.dioty.co",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "true",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e7c46d5e.a1283",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard"
+    }
+]
