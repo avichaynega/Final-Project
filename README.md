@@ -87,6 +87,15 @@ The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each
 
 <img src="./images/Relay.jpeg" width="500" height="500" />
 
+The AFM:
+
+<img src="./images/AFM.jpeg"/>
+
+Node-Red + UI:
+
+<img src="./images/ui.png" width="700" height="500" />
+
+<img src="./images/nodered.png" width="600" height="500" />
 
 ### Machine Learning
 
