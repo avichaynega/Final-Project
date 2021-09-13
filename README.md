@@ -3,6 +3,7 @@
 # <p align="center"> Final Project - Automatic feeding machine</p>  
 
 Authors : Avichay nega  , [Ido Elmaliach](https://github.com/IdosElmo), [Matan Tzabari](https://github.com/matanya679)
+
 Mail: afmproject2021@gmail.com
 
 Advisor : Yossi Zaguri  
@@ -69,11 +70,11 @@ you can see more here https://nodered.org/#get-started
 ##
 
 The ESP32 Controller is connected to several key components:
-- RF522 Sensor
+- RF522 Sensor (Authentication sensor)
 - HX711 module (Weight sensor)
-- Linear Actuator
+- Linear Actuator (Engine)
 - 2 Relays
-- 
+
 <img src="./images/esp32%20wiring.png" width="800" height="500" />
 
 The Actuator (our engine) is connected to the controller via 2 relays. The relays are used to reverse the polarity so the actuator can work in both directions
@@ -88,6 +89,10 @@ The ESP32 has 3.3v pin and a 5v pin, the rest of the GPIO's can output 3.3v each
 <img src="./images/Relay.jpeg" width="500" height="500" />
 
 The AFM:
+Once connected to power, AFM will automatically connect to your Wi-Fi. The main indicator blue light will blink showing the device is ready to be used.
+Upon ID identification, the linear actuator will push the food down the canal.
+Using the weight sensor, the AFM makes sure no refill will occour while there is still food on the plate.
+With MQTT protocol and our mqtt broker, messages are sent to our node-red application and is saved as a csv file on a daily basis.
 
 <img src="./images/AFM.jpeg"/>
 
